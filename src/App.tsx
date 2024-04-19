@@ -25,7 +25,17 @@ function App() {
    async function deleteTodo(id: number) {
       console.log("del" + id);
       try {
-         const { data } = await axios.delete(`${api}/${id}`)
+         const { data } = await axios.delete(`${api}/${id}`);
+         get();
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   async function completeTodo(todo: Todo_T) {
+      try {
+         const { data } = await axios.put(`${api}/${todo.id}`, { title: todo.title, completed: !todo.completed })
+         console.log(data);
          get()
       } catch (error) {
          console.log(error);
@@ -53,7 +63,14 @@ function App() {
             {todos.length ? (
                <ul className="">
                   {todos.map((todo: Todo_T) => {
-                     return <Todo key={todo.id} todo={todo} deleteTodo={deleteTodo} />;
+                     return (
+                        <Todo
+                           key={todo.id}
+                           todo={todo}
+                           deleteTodo={deleteTodo}
+                           completeTodo={completeTodo}
+                        />
+                     );
                   })}
                </ul>
             ) : (

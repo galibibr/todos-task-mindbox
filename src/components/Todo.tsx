@@ -3,7 +3,7 @@ import { IoCheckmark } from "react-icons/io5";
 import { GoX } from "react-icons/go";
 import '../App.css'
 
-const Todo = ({ todo, deleteTodo }: TodoProps_T) => {
+const Todo = ({ todo, deleteTodo, completeTodo }: TodoProps_T) => {
    return (
       <li
          className="relative todo text-[24px] border-b border-solid border-[#ededed]"
@@ -15,8 +15,9 @@ const Todo = ({ todo, deleteTodo }: TodoProps_T) => {
                }`}>
                {todo.title}
             </label>
-            {/* check */}
+            {/* complete */}
             <div
+            onClick={() => completeTodo(todo)}
                className={`absolute flex items-center cursor-pointer justify-center left-[8px] rounded-full w-[32px] h-[32px] border ${
                   todo.completed ? "border-[#3ca78c]" : "border-[#949494]"
                }`}>
