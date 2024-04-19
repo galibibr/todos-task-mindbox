@@ -6,4 +6,5 @@ export type Todo_T = {
 
 export type TodoProps_T = {
    todo: Todo_T;
+   deleteTodo: (id: number) => void;
 }
