@@ -25,7 +25,7 @@ function App() {
 
    async function deleteTodo(id: number) {
       try {
-         const { data } = await axios.delete(`${api}/${id}`);
+         await axios.delete(`${api}/${id}`);
          get();
       } catch (error) {
          console.log(error);
@@ -34,7 +34,7 @@ function App() {
 
    async function completeTodo(todo: Todo_T) {
       try {
-         const { data } = await axios.put(`${api}/${todo.id}`, {
+         await axios.put(`${api}/${todo.id}`, {
             title: todo.title,
             completed: !todo.completed,
          });
@@ -46,7 +46,7 @@ function App() {
 
    async function addTodo(todo: Todo_T) {
       try {
-         const { data } = await axios.post(api, todo);
+         await axios.post(api, todo);
          get();
       } catch (error) {
          console.log(error);
