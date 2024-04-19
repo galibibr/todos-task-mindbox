@@ -53,6 +53,13 @@ function App() {
       }
    }
 
+   // Clear completed
+   function handleClearCompleted() {
+      todos
+         .filter((todo: Todo_T) => todo.completed)
+         .forEach((todo: Todo_T) => todo.id && deleteTodo(todo.id));
+   }
+
    useEffect(() => {
       get();
    }, []);
@@ -94,26 +101,27 @@ function App() {
                      placeholder="What need to be done?"
                   />
                </form>
-               {todos.length && (
+               {todos.length ? (
                   <GoChevronDown className="absolute cursor-pointer text-[28px] text-[#949494] left-[10px]" />
+               ) : (
+                  ""
                )}
             </div>
          </header>
          <section>
-            {todos.length ? (
-               <ul className="">
-                  {todos
-                     .filter((todo: Todo_T) => {
-                        switch(filter) {
-                           case 'active':
-                              return !todo.completed;
-                           case 'completed':
-                              return todo.completed;
-                           default:
-                              return todo;
-                        }
-                     })
-                     .map((todo: Todo_T) => {
+            <ul className="">
+               {todos
+                  .filter((todo: Todo_T) => {
+                     switch (filter) {
+                        case "active":
+                           return !todo.completed;
+                        case "completed":
+                           return todo.completed;
+                        default:
+                           return todo;
+                     }
+                  })
+                  .map((todo: Todo_T) => {
                      return (
                         <Todo
                            key={todo.id}
@@ -123,52 +131,55 @@ function App() {
                         />
                      );
                   })}
-               </ul>
-            ) : (
-               <div>Loading...</div>
-            )}
-         </section>
-         <footer className="p-[10px_15px] flex justify-between items-center text-center text-[15px] h-[47px]">
-            {/* Cnt left items */}
-            <span className="float-left">
-               {leftLengthTodos ? leftLengthTodos : "No"}{" "}
-               {`item${leftLengthTodos > 1 ? "s" : ""} left`}
-            </span>
-            {/* Filter */}
-            <ul className="absolute flex justify-center items-start gap-[5px] left-0 right-0">
-               <li
-                  onClick={() => setFilter("all")}
-                  className={`border ${
-                     filter === "all"
-                        ? "border-[#949494]"
-                        : "border-transparent"
-                  } hover:border-[#949494] p-[2px_7px] cursor-pointer rounded-[3px]`}>
-                  All
-               </li>
-               <li
-                  onClick={() => setFilter("active")}
-                  className={`border ${
-                     filter === "active"
-                        ? "border-[#949494]"
-                        : "border-transparent"
-                  } hover:border-[#949494] p-[2px_7px] cursor-pointer rounded-[3px]`}>
-                  Active
-               </li>
-               <li
-                  onClick={() => setFilter("completed")}
-                  className={`border ${
-                     filter === "completed"
-                        ? "border-[#949494]"
-                        : "border-transparent"
-                  } hover:border-[#949494] p-[2px_7px] cursor-pointer rounded-[3px]`}>
-                  Completed
-               </li>
             </ul>
-            {/* Clear */}
-            <button className="float-right cursor-pointer relative hover:underline">
-               Clear completed
-            </button>
-         </footer>
+         </section>
+         {todos.length ? (
+            <footer className="p-[10px_15px] flex justify-between items-center text-center text-[15px] h-[47px]">
+               {/* Cnt left items */}
+               <span className="float-left">
+                  {leftLengthTodos ? leftLengthTodos : "No"}{" "}
+                  {`item${leftLengthTodos > 1 ? "s" : ""} left`}
+               </span>
+               {/* Filter */}
+               <ul className="absolute flex justify-center items-start gap-[5px] left-0 right-0">
+                  <li
+                     onClick={() => setFilter("all")}
+                     className={`border ${
+                        filter === "all"
+                           ? "border-[#949494]"
+                           : "border-transparent"
+                     } hover:border-[#949494] p-[2px_7px] cursor-pointer rounded-[3px]`}>
+                     All
+                  </li>
+                  <li
+                     onClick={() => setFilter("active")}
+                     className={`border ${
+                        filter === "active"
+                           ? "border-[#949494]"
+                           : "border-transparent"
+                     } hover:border-[#949494] p-[2px_7px] cursor-pointer rounded-[3px]`}>
+                     Active
+                  </li>
+                  <li
+                     onClick={() => setFilter("completed")}
+                     className={`border ${
+                        filter === "completed"
+                           ? "border-[#949494]"
+                           : "border-transparent"
+                     } hover:border-[#949494] p-[2px_7px] cursor-pointer rounded-[3px]`}>
+                     Completed
+                  </li>
+               </ul>
+               {/* Clear */}
+               <button
+                  onClick={handleClearCompleted}
+                  className="float-right cursor-pointer relative hover:underline">
+                  Clear completed
+               </button>
+            </footer>
+         ) : (
+            ""
+         )}
       </div>
    );
 }
