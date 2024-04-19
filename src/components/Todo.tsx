@@ -25,7 +25,7 @@ const Todo = ({ todo, deleteTodo, completeTodo }: TodoProps_T) => {
             </div>
             {/* delete */}
             <div className="absolute end-[20px]">
-               <GoX onClick={() => deleteTodo(todo.id)} className="ic-del hidden text-[#949494] hover:text-black" />
+               <GoX onClick={() => todo.id && deleteTodo(todo.id)} className="ic-del hidden text-[#949494] hover:text-black" />
             </div>
          </div>
       </li>

@@ -8,6 +8,7 @@ import { GoChevronDown } from "react-icons/go";
 function App() {
    const [todos, setTodos] = useState<Todo_T[]>([]);
    const api = import.meta.env.VITE_API_URL;
+   // const [title, setTitle] = useState<string>("");
 
    async function get() {
       try {
@@ -18,12 +19,7 @@ function App() {
       }
    }
 
-   useEffect(() => {
-      get();
-   }, []);
-
    async function deleteTodo(id: number) {
-      console.log("del" + id);
       try {
          const { data } = await axios.delete(`${api}/${id}`);
          get();
@@ -34,12 +30,48 @@ function App() {
 
    async function completeTodo(todo: Todo_T) {
       try {
-         const { data } = await axios.put(`${api}/${todo.id}`, { title: todo.title, completed: !todo.completed })
+         const { data } = await axios.put(`${api}/${todo.id}`, {
+            title: todo.title,
+            completed: !todo.completed,
+         });
          console.log(data);
-         get()
+         get();
       } catch (error) {
          console.log(error);
       }
+   }
+
+   async function addTodo(todo: Todo_T) {
+      try {
+         const { data } = await axios.post(api, todo);
+         get();
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   useEffect(() => {
+      get();
+   }, []);
+
+   // get title with useState
+   // function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+   //    event.preventDefault();
+   //    setTitle(event.target.value);
+   // }
+
+   // get title with target
+   function handleSubmit(
+      event: React.BaseSyntheticEvent<Event, EventTarget & HTMLFormElement>
+   ) {
+      event.preventDefault();
+
+      addTodo({
+         title: event.target["title"].value,
+         completed: false,
+      });
+      event.target["title"].value = "";
+      // setTitle("");
    }
 
    return (
@@ -49,11 +81,16 @@ function App() {
                todos
             </h1>
             <div className="relative flex items-center">
-               <input
-                  className="p-[16px] pl-[60px] italic w-full shadow-md text-[24px] input-title outline-1 outline-[#949494]"
-                  type="text"
-                  placeholder="What need to be done?"
-               />
+               <form onSubmit={handleSubmit} className="w-full">
+                  <input
+                     name="title"
+                     // onChange={handleChange}
+                     // value={title}
+                     className="p-[16px] pl-[60px] italic w-full shadow-md text-[24px] input-title outline-1 outline-[#949494]"
+                     type="text"
+                     placeholder="What need to be done?"
+                  />
+               </form>
                {todos.length && (
                   <GoChevronDown className="absolute cursor-pointer text-[28px] text-[#949494] left-[10px]" />
                )}
