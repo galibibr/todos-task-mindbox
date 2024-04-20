@@ -38,6 +38,8 @@ function App() {
             title: todo.title,
             completed: !todo.completed,
          });
+         console.log('comp');
+         
          get();
       } catch (error) {
          console.log(error);
@@ -58,6 +60,18 @@ function App() {
       todos
          .filter((todo: Todo_T) => todo.completed)
          .forEach((todo: Todo_T) => todo.id && deleteTodo(todo.id));
+   }
+
+   // Complete all items
+   function handleCompleteAll() {
+      todos.forEach((todo: Todo_T) => {
+         completeTodo(todo)
+         if (todo.completed) {
+            completeTodo({ ...todo, completed: true });
+         } else {
+            completeTodo({ ...todo, completed: false });
+         }
+      });
    }
 
    useEffect(() => {
@@ -102,7 +116,10 @@ function App() {
                   />
                </form>
                {todos.length ? (
-                  <GoChevronDown className="absolute cursor-pointer text-[28px] text-[#949494] left-[10px]" />
+                  <GoChevronDown
+                     onClick={handleCompleteAll}
+                     className="absolute cursor-pointer text-[28px] text-[#949494] left-[10px]"
+                  />
                ) : (
                   ""
                )}
@@ -133,6 +150,7 @@ function App() {
                   })}
             </ul>
          </section>
+         {/* Footer */}
          {todos.length ? (
             <footer className="p-[10px_15px] flex justify-between items-center text-center text-[15px] h-[47px]">
                {/* Cnt left items */}
@@ -171,11 +189,15 @@ function App() {
                   </li>
                </ul>
                {/* Clear */}
-               <button
-                  onClick={handleClearCompleted}
-                  className="float-right cursor-pointer relative hover:underline">
-                  Clear completed
-               </button>
+               {todos.find((todo: Todo_T) => todo.completed) ? (
+                  <button
+                     onClick={handleClearCompleted}
+                     className="float-right cursor-pointer relative hover:underline">
+                     Clear completed
+                  </button>
+               ) : (
+                  ""
+               )}
             </footer>
          ) : (
             ""
